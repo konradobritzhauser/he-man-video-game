@@ -171,7 +171,7 @@ class Engine {
   addEnemy() {
     var enemySpots = GAME_WIDTH / ENEMY_WIDTH;
 
-    var enemySpot;
+    var enemySpot = undefined;
     // Keep looping until we find a free enemy spot at random
     while (!enemySpot || this.enemies[enemySpot]) {
       enemySpot = Math.floor(Math.random() * enemySpots);
