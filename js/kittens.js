@@ -1,116 +1,116 @@
 // This sectin contains some game constants. It is not super interesting
-var GAME_WIDTH = 375;
-var GAME_HEIGHT = 500;
+let GAME_WIDTH = 375
+let GAME_HEIGHT = 500
 
-var ENEMY_WIDTH = 75;
-var ENEMY_HEIGHT = 156;
-var MAX_ENEMIES = 3;
+let ENEMY_WIDTH = 75
+let ENEMY_HEIGHT = 156
+let MAX_ENEMIES = 3
 
-var PLAYER_WIDTH = 75;
-var PLAYER_HEIGHT = 54;
+let PLAYER_WIDTH = 75
+let PLAYER_HEIGHT = 54
 
 // These two constants keep us from using "magic numbers" in our code
-var LEFT_ARROW_CODE = 37;
-var RIGHT_ARROW_CODE = 39;
+let LEFT_ARROW_CODE = 37
+let RIGHT_ARROW_CODE = 39
 
 // These two constants allow us to DRY
-var MOVE_LEFT = "left";
-var MOVE_RIGHT = "right";
+let MOVE_LEFT = "left"
+let MOVE_RIGHT = "right"
 
 // Preload game images
-let imageFilenames = ["enemy.png", "stars.png", "player.png"];
-var images = {};
+let imageFilenames = ["enemy.png", "stars.png", "player.png"]
+let images = {}
 
 imageFilenames.forEach(function(imgName) {
-  var img = document.createElement("img");
-  img.src = "images/" + imgName;
-  images[imgName] = img;
-});
+  let img = document.createElement("img")
+  img.src = "images/" + imgName
+  images[imgName] = img
+})
 
 // This section is where you will be doing most of your coding
 class Enemy {
   constructor(root, xPos) {
-    this.root = root;
-    this.x = xPos;
-    this.y = -ENEMY_HEIGHT;
-    let img = document.createElement("img");
-    img.src = "images/enemy.png";
-    img.style.position = "absolute";
-    img.style.left = this.x + "px";
-    img.style.top = this.y + "px";
-    img.style.zIndex = 5;
-    root.appendChild(img);
+    this.root = root
+    this.x = xPos
+    this.y = -ENEMY_HEIGHT
+    let img = document.createElement("img")
+    img.src = "images/enemy.png"
+    img.style.position = "absolute"
+    img.style.left = this.x + "px"
+    img.style.top = this.y + "px"
+    img.style.zIndex = 5
+    root.appendChild(img)
 
-    this.domElement = img;
+    this.domElement = img
     // Each enemy should have a different speed
-    this.speed = Math.random() / 2 + 0.25;
+    this.speed = Math.random() / 2 + 0.25
   }
 
   update(timeDiff) {
-    this.y = this.y + timeDiff * this.speed;
+    this.y = this.y + timeDiff * this.speed
   }
 
   render(ctx) {
-    this.domElement.style.left = this.x + "px";
-    this.domElement.style.top = this.y + "px";
+    this.domElement.style.left = this.x + "px"
+    this.domElement.style.top = this.y + "px"
   }
 
   destroy() {
     // When an enemy reaches the end of the screen, the corresponding DOM element should be destroyed
-    this.root.removeChild(this.domElement);
+    this.root.removeChild(this.domElement)
   }
 }
 
 class Player {
   constructor(root) {
-    this.root = root;
-    this.x = 2 * PLAYER_WIDTH;
-    this.y = GAME_HEIGHT - PLAYER_HEIGHT - 10;
+    this.root = root
+    this.x = 2 * PLAYER_WIDTH
+    this.y = GAME_HEIGHT - PLAYER_HEIGHT - 10
 
-    let img = document.createElement("img");
-    img.src = "images/player.png";
-    img.style.position = "absolute";
-    img.style.left = this.x + "px";
-    img.style.top = this.y + "px";
-    img.style.zIndex = "10";
+    let img = document.createElement("img")
+    img.src = "images/player.png"
+    img.style.position = "absolute"
+    img.style.left = this.x + "px"
+    img.style.top = this.y + "px"
+    img.style.zIndex = "10"
 
-    root.appendChild(img);
+    root.appendChild(img)
 
-    this.domElement = img;
+    this.domElement = img
   }
 
   // This method is called by the game engine when left/right arrows are pressed
   move(direction) {
     if (direction === MOVE_LEFT && this.x > 0) {
-      this.x = this.x - PLAYER_WIDTH;
+      this.x = this.x - PLAYER_WIDTH
     } else if (direction === MOVE_RIGHT && this.x < GAME_WIDTH - PLAYER_WIDTH) {
-      this.x = this.x + PLAYER_WIDTH;
+      this.x = this.x + PLAYER_WIDTH
     }
   }
 
   render(ctx) {
-    this.domElement.style.left = this.x + "px";
-    this.domElement.style.top = this.y + "px";
+    this.domElement.style.left = this.x + "px"
+    this.domElement.style.top = this.y + "px"
   }
 }
 
 class Text {
   constructor(root, xPos, yPos) {
-    this.root = root;
+    this.root = root
 
-    let span = document.createElement("span");
-    span.style.position = "absolute";
-    span.style.left = xPos;
-    span.style.top = yPos;
-    span.style.font = "bold 30px Impact";
+    let span = document.createElement("span")
+    span.style.position = "absolute"
+    span.style.left = xPos
+    span.style.top = yPos
+    span.style.font = "bold 30px Impact"
 
-    root.appendChild(span);
-    this.domElement = span;
+    root.appendChild(span)
+    this.domElement = span
   }
 
   // This method is called by the game engine when left/right arrows are pressed
   update(txt) {
-    this.domElement.innerText = txt;
+    this.domElement.innerText = txt
   }
 }
 
@@ -120,33 +120,33 @@ This engine will use your Enemy and Player classes to create the behavior of the
 */
 class Engine {
   constructor(element) {
-    this.root = element;
+    this.root = element
     // Setup the player
-    this.player = new Player(this.root);
-    this.info = new Text(this.root, 5, 30);
+    this.player = new Player(this.root)
+    this.info = new Text(this.root, 5, 30)
 
     // Setup enemies, making sure there are always three
-    this.setupEnemies();
+    this.setupEnemies()
 
     // Put a white div at the bottom so that enemies seem like they dissappear
-    let whiteBox = document.createElement("div");
-    whiteBox.style.zIndex = 100;
-    whiteBox.style.position = "absolute";
-    whiteBox.style.top = GAME_HEIGHT + "px";
-    whiteBox.style.height = ENEMY_HEIGHT + "px";
-    whiteBox.style.width = GAME_WIDTH + "px";
-    whiteBox.style.background = "#fff";
-    this.root.append(whiteBox);
+    let whiteBox = document.createElement("div")
+    whiteBox.style.zIndex = 100
+    whiteBox.style.position = "absolute"
+    whiteBox.style.top = GAME_HEIGHT + "px"
+    whiteBox.style.height = ENEMY_HEIGHT + "px"
+    whiteBox.style.width = GAME_WIDTH + "px"
+    whiteBox.style.background = "#fff"
+    this.root.append(whiteBox)
 
-    let bg = document.createElement("img");
-    bg.src = "images/stars.png";
-    bg.style.position = "absolute";
-    bg.style.height = GAME_HEIGHT + "px";
-    bg.style.width = GAME_WIDTH + "px";
-    this.root.append(bg);
+    let bg = document.createElement("img")
+    bg.src = "images/stars.png"
+    bg.style.position = "absolute"
+    bg.style.height = GAME_HEIGHT + "px"
+    bg.style.width = GAME_WIDTH + "px"
+    this.root.append(bg)
 
     // Since gameLoop will be called out of context, bind it once here.
-    this.gameLoop = this.gameLoop.bind(this);
+    this.gameLoop = this.gameLoop.bind(this)
   }
 
   /*
@@ -155,47 +155,47 @@ class Engine {
      */
   setupEnemies() {
     if (!this.enemies) {
-      this.enemies = [];
+      this.enemies = []
     }
 
     while (
       this.enemies.filter(function() {
-        return true;
+        return true
       }).length < MAX_ENEMIES
     ) {
-      this.addEnemy();
+      this.addEnemy()
     }
   }
 
   // This method finds a random spot where there is no enemy, and puts one in there
   addEnemy() {
-    var enemySpots = GAME_WIDTH / ENEMY_WIDTH;
+    let enemySpots = GAME_WIDTH / ENEMY_WIDTH
 
-    var enemySpot = undefined;
+    let enemySpot = undefined
     // Keep looping until we find a free enemy spot at random
     while (!enemySpot || this.enemies[enemySpot]) {
-      enemySpot = Math.floor(Math.random() * enemySpots);
+      enemySpot = Math.floor(Math.random() * enemySpots)
     }
 
-    this.enemies[enemySpot] = new Enemy(this.root, enemySpot * ENEMY_WIDTH);
+    this.enemies[enemySpot] = new Enemy(this.root, enemySpot * ENEMY_WIDTH)
   }
 
   // This method kicks off the game
   start() {
-    this.score = 0;
-    this.lastFrame = Date.now();
+    this.score = 0
+    this.lastFrame = Date.now()
     let keydownHandler = function(e) {
       if (e.keyCode === LEFT_ARROW_CODE) {
-        this.player.move(MOVE_LEFT);
+        this.player.move(MOVE_LEFT)
       } else if (e.keyCode === RIGHT_ARROW_CODE) {
-        this.player.move(MOVE_RIGHT);
+        this.player.move(MOVE_RIGHT)
       }
-    };
-    keydownHandler = keydownHandler.bind(this);
+    }
+    keydownHandler = keydownHandler.bind(this)
     // Listen for keyboard left/right and update the player
-    document.addEventListener("keydown", keydownHandler);
+    document.addEventListener("keydown", keydownHandler)
 
-    this.gameLoop();
+    this.gameLoop()
   }
 
   /*
@@ -210,55 +210,55 @@ class Engine {
      */
   gameLoop() {
     // Check how long it's been since last frame
-    var currentFrame = Date.now();
-    var timeDiff = currentFrame - this.lastFrame;
+    let currentFrame = Date.now()
+    let timeDiff = currentFrame - this.lastFrame
 
     // Increase the score!
-    this.score += timeDiff;
+    this.score += timeDiff
 
     // Call update on all enemies
     this.enemies.forEach(function(enemy) {
-      enemy.update(timeDiff);
-    });
+      enemy.update(timeDiff)
+    })
 
     // Draw everything!
     //this.ctx.drawImage(images["stars.png"], 0, 0); // draw the star bg
     let renderEnemy = function(enemy) {
-      enemy.render(this.ctx);
-    };
-    renderEnemy = renderEnemy.bind(this);
-    this.enemies.forEach(renderEnemy); // draw the enemies
-    this.player.render(this.ctx); // draw the player
+      enemy.render(this.ctx)
+    }
+    renderEnemy = renderEnemy.bind(this)
+    this.enemies.forEach(renderEnemy) // draw the enemies
+    this.player.render(this.ctx) // draw the player
 
     // Check if any enemies should die
     this.enemies.forEach((enemy, enemyIdx) => {
       if (enemy.y > GAME_HEIGHT) {
-        this.enemies[enemyIdx].destroy();
-        delete this.enemies[enemyIdx];
+        this.enemies[enemyIdx].destroy()
+        delete this.enemies[enemyIdx]
       }
-    });
-    this.setupEnemies();
+    })
+    this.setupEnemies()
 
     // Check if player is dead
     if (this.isPlayerDead()) {
       // If they are dead, then it's game over!
-      this.info.update(this.score + " GAME OVER");
+      this.info.update(this.score + " GAME OVER")
     } else {
       // If player is not dead, then draw the score
-      this.info.update(this.score);
+      this.info.update(this.score)
 
       // Set the time marker and redraw
-      this.lastFrame = Date.now();
-      setTimeout(this.gameLoop, 20);
+      this.lastFrame = Date.now()
+      setTimeout(this.gameLoop, 20)
     }
   }
 
   isPlayerDead() {
     // TODO: fix this function!
-    return false;
+    return false
   }
 }
 
 // This section will start the game
-var gameEngine = new Engine(document.getElementById("app"));
-gameEngine.start();
+let gameEngine = new Engine(document.getElementById("app"))
+gameEngine.start()
