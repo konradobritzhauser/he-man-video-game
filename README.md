@@ -6,6 +6,8 @@
 
 ![Alt text](/relative/path/to/img.jpg?raw=true "Optional Title")
 
+![ScreenShot](https://raw.github.com/{konradobritzhauser}/{he-man-video-game}/{master}/{/screenshot/titleScreen.PNG})
+
 ## Description  
 Thrilled to put my programming skills to the test, for my first published javascript project I wrote this thrilling, fast-paced and meme-inspired video game that will push ones reflexes to the next level. 
 
