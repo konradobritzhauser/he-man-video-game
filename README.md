@@ -2,8 +2,7 @@
 
 [image] Main screen
 ![Alt text](
-        he-man-video-game/screenshots/titleScreen.PNG
-      ?raw=true "Title")
+        he-man-video-game/screenshots/titleScreen.PNG)
 
 ## Description  
 Thrilled to put my programming skills to the test, for my first published javascript project I wrote this thrilling, fast-paced and meme-inspired video game that will push ones reflexes to the next level. 
